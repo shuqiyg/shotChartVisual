@@ -3,10 +3,10 @@ from nba_api.stats.endpoints import commonplayerinfo, LeagueLeaders, scoreboardv
 import pandas, json, requests, os
 
 shotChartLP = shotchartlineupdetail.ShotChartLineupDetail(team_id_nullable=1610612740, context_measure_detailed="PTS")
-print(shotChartLP.shot_chart_lineup_detail.get_data_frame())
+# print(shotChartLP.shot_chart_lineup_detail.get_data_frame())
 
 shotChartLeagueWide = shotchartleaguewide.ShotChartLeagueWide()
-print(shotChartLeagueWide.get_data_frames())
+# print(shotChartLeagueWide.get_data_frames())
 
 shotChartDetail = shotchartdetail.ShotChartDetail(team_id=1610612740, player_id=202685, opponent_team_id=1610612742)
 shotChartDetailMade = shotchartdetail.ShotChartDetail(team_id=1610612740, player_id=202685, season_nullable="2021-22")
@@ -15,9 +15,17 @@ shotChartDetailAll = shotchartdetail.ShotChartDetail(team_id=1610612740, player_
 chartLeagueAvgDF = shotChartDetailAll.league_averages.get_data_frame()
 chartMadeDF = shotChartDetailMade.shot_chart_detail.get_data_frame()
 chartAllDF = shotChartDetailAll.shot_chart_detail.get_data_frame()
-print(chartLeagueAvgDF)
+# print(chartLeagueAvgDF)
 # print(chartMadeDF)
 # print(chartAllDF)
 
 # chartAllDF.to_csv("shotChartDetail.csv", index=False)
-chartLeagueAvgDF.to_csv("leagueShotChart.csv", index=False)
+# chartLeagueAvgDF.to_csv("leagueShotChart.csv", index=False)
+
+teamDashPtsShots = TeamDashPtShots(team_id=1610612740, season="2022-23")
+teamDashPtsShotsDF = teamDashPtsShots.general_shooting.get_data_frame()
+teamDashPtsShotsClosestDF = teamDashPtsShots.closest_defender_shooting.get_data_frame()
+print(teamDashPtsShotsClosestDF)
+print(teamDashPtsShotsDF)
+teamDashPtsShotsDF.to_csv("pelicans_team_shots_general_shooting.csv", index=False)
+teamDashPtsShotsClosestDF.to_csv("pelicans_team_shots_closest.csv", index=False)
