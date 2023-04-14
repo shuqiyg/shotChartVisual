@@ -4,45 +4,56 @@ import pandas, json, requests, os, time
 
 
 
-
-# ctr = commonteamroster.CommonTeamRoster(team_id=1610612746)
-# ctrDF = ctr.common_team_roster.get_data_frame()
-# print(ctrDF["PLAYER_ID"].to_numpy())
 teamIDs = [1610612743, 1610612749, 1610612738, 1610612763, 1610612758, 1610612755, 1610612739, 1610612746, 1610612752, 1610612756, 1610612744, 1610612748, 1610612750, 1610612751, 1610612737,
            1610612747, 1610612740, 1610612761, 1610612741, 1610612760, 1610612754, 1610612742, 1610612762, 1610612764, 1610612753, 1610612757, 1610612766, 1610612759, 1610612765, 1610612745]
 
-teamRosterIdsPairs = {}
-for teamID in teamIDs[0:10]:
-    ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
-    ctrDF = ctr.common_team_roster.get_data_frame()
-    crtArray = ctrDF["PLAYER_ID"].to_numpy()
-    print(crtArray)
-    teamRosterIdsPairs[teamID] = crtArray.tolist()
-time.sleep(5)
-for teamID in teamIDs[10:20]:
-    ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
-    ctrDF = ctr.common_team_roster.get_data_frame()
-    crtArray = ctrDF["PLAYER_ID"].to_numpy()
-    print(crtArray)
-    teamRosterIdsPairs[teamID] = crtArray.tolist()
-time.sleep(5)
-for teamID in teamIDs[20:30]:
-    ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
-    ctrDF = ctr.common_team_roster.get_data_frame()
-    crtArray = ctrDF["PLAYER_ID"].to_numpy()
-    print(crtArray)
-    teamRosterIdsPairs[teamID] = crtArray.tolist()
-    # if os.path.getsize("teamRosterIdsPairs.json") == 0:
-    #     data = {}
-    # else:
-    #     with open("teamRosterIdsPairs.json", "r") as jFile:
-    #         if jFile.read():
-    #             data = json.load(jFile)
-    #     # data = json.load(jFile)
-    #     data.append(teamRosterIdsPairs)
-    #     print(data)
-with open("teamRosterIdsPairs.json", "a") as jFile:
-    json.dump(teamRosterIdsPairs, jFile)
+# fetch LeagueDashTeamShotLocations 2018-19 - 2022-23
+# for teamID in teamIDs[0:30]:
+#     leaguedashteamshotlocation = leaguedashteamshotlocations.LeagueDashTeamShotLocations(team_id_nullable= teamID, season="2018-19")
+#     teamShotLocsDF = leaguedashteamshotlocation.shot_locations.get_data_frame()
+#     teamShotLocsDF.to_json(f'LeagueDashTeamShotLocations18-19/{teamID}.json')
+
+# create a json file for teamID and RosterIDs pairs
+# teamRosterIdsPairs = {}
+# for teamID in teamIDs[0:10]:
+#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
+#     ctrDF = ctr.common_team_roster.get_data_frame()
+#     crtArray = ctrDF["PLAYER_ID"].to_numpy()
+#     print(crtArray)
+#     teamRosterIdsPairs[teamID] = crtArray.tolist()
+# time.sleep(5)
+# for teamID in teamIDs[10:20]:
+#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
+#     ctrDF = ctr.common_team_roster.get_data_frame()
+#     crtArray = ctrDF["PLAYER_ID"].to_numpy()
+#     print(crtArray)
+#     teamRosterIdsPairs[teamID] = crtArray.tolist()
+# time.sleep(5)
+# for teamID in teamIDs[20:30]:
+#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
+#     ctrDF = ctr.common_team_roster.get_data_frame()
+#     crtArray = ctrDF["PLAYER_ID"].to_numpy()
+#     print(crtArray)
+#     teamRosterIdsPairs[teamID] = crtArray.tolist()
+# with open("teamRosterIdsPairs.json", "a") as jFile:
+#     json.dump(teamRosterIdsPairs, jFile)
+
+#fetch shotchartdetail of every single player for the regular seasons
+with open("teamRosterIdsPairs.json", "r") as trpJson:
+    data = json.load(trpJson)
+print(type(data))
+idsArray = data[str(teamIDs[29])]
+
+for id in idsArray:
+    shotChartDetailAll = shotchartdetail.ShotChartDetail(teamIDs[29], player_id=id, context_measure_simple="FGA")
+    shotChartDetailAllDF = shotChartDetailAll.shot_chart_detail.get_data_frame();
+    print(shotChartDetailAllDF)
+    # with open(f"shotChartDetail/{teamIDs[0]}/{id}.json", "a") as jFile:
+    #     json.dump(shotChartDetailAllDF.to_json(), jFile)
+    shotChartDetailAllDF.to_json(f'shotChartDetail/{teamIDs[29]}/{id}.json')
+
+
+
 # shotChartLP = shotchartlineupdetail.ShotChartLineupDetail(season_type_all_star='Regular Season', season='2021-22', context_measure_detailed='FGA', period=0, team_id_nullable=0,game_id_nullable=0)
 # print(shotChartLP.shot_chart_lineup_detail.get_data_frame())
 
@@ -77,10 +88,7 @@ with open("teamRosterIdsPairs.json", "a") as jFile:
 
 # leaguedashteamshotlocations = leaguedashteamshotlocations.LeagueDashTeamShotLocations(team_id_nullable= teamIDs[0], season="2022-23")
 
-# for teamID in teamIDs[0:30]:
-#     leaguedashteamshotlocation = leaguedashteamshotlocations.LeagueDashTeamShotLocations(team_id_nullable= teamID, season="2018-19")
-#     teamShotLocsDF = leaguedashteamshotlocation.shot_locations.get_data_frame()
-#     teamShotLocsDF.to_json(f'LeagueDashTeamShotLocations18-19/{teamID}.json')
+
 
 
 # teamShotLocsDF = leaguedashteamshotlocations.shot_locations.get_data_frame()
