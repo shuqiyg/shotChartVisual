@@ -42,15 +42,16 @@ teamIDs = [1610612743, 1610612749, 1610612738, 1610612763, 1610612758, 161061275
 with open("teamRosterIdsPairs.json", "r") as trpJson:
     data = json.load(trpJson)
 print(type(data))
-idsArray = data[str(teamIDs[29])]
+idsArray = data[str(1610612751)]
 
 for id in idsArray:
-    shotChartDetailAll = shotchartdetail.ShotChartDetail(teamIDs[29], player_id=id, context_measure_simple="FGA")
+    shotChartDetailAll = shotchartdetail.ShotChartDetail(
+        team_id=1610612751, player_id=id, context_measure_simple="FGA")
     shotChartDetailAllDF = shotChartDetailAll.shot_chart_detail.get_data_frame();
     print(shotChartDetailAllDF)
     # with open(f"shotChartDetail/{teamIDs[0]}/{id}.json", "a") as jFile:
     #     json.dump(shotChartDetailAllDF.to_json(), jFile)
-    shotChartDetailAllDF.to_json(f'shotChartDetail/{teamIDs[29]}/{id}.json')
+    shotChartDetailAllDF.to_json(f'shotChartDetail/1610612751/{id}.json')
 
 
 
