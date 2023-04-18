@@ -16,42 +16,53 @@ teamIDs = [1610612743, 1610612749, 1610612738, 1610612763, 1610612758, 161061275
 # create a json file for teamID and RosterIDs pairs
 # teamRosterIdsPairs = {}
 # for teamID in teamIDs[0:10]:
-#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
+#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID, season="2018-19")
 #     ctrDF = ctr.common_team_roster.get_data_frame()
 #     crtArray = ctrDF["PLAYER_ID"].to_numpy()
 #     print(crtArray)
 #     teamRosterIdsPairs[teamID] = crtArray.tolist()
 # time.sleep(5)
 # for teamID in teamIDs[10:20]:
-#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
+#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID,season="2018-19")
 #     ctrDF = ctr.common_team_roster.get_data_frame()
 #     crtArray = ctrDF["PLAYER_ID"].to_numpy()
 #     print(crtArray)
 #     teamRosterIdsPairs[teamID] = crtArray.tolist()
 # time.sleep(5)
 # for teamID in teamIDs[20:30]:
-#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID)
+#     ctr = commonteamroster.CommonTeamRoster(team_id=teamID, season="2018-19")
 #     ctrDF = ctr.common_team_roster.get_data_frame()
 #     crtArray = ctrDF["PLAYER_ID"].to_numpy()
 #     print(crtArray)
 #     teamRosterIdsPairs[teamID] = crtArray.tolist()
-# with open("teamRosterIdsPairs.json", "a") as jFile:
+# with open("teamRosterIdsPairs18-19.json", "a") as jFile:
 #     json.dump(teamRosterIdsPairs, jFile)
 
 #fetch shotchartdetail of every single player for the regular seasons
-with open("teamRosterIdsPairs.json", "r") as trpJson:
+with open("teamRosterIdsPairs18-19.json", "r") as trpJson:
     data = json.load(trpJson)
 print(type(data))
-idsArray = data[str(1610612751)]
+print(data)
+size = 0
+for teamID in teamIDs:
+    for playerID in data[str(teamID)]:
+        size+=1
 
-for id in idsArray:
-    shotChartDetailAll = shotchartdetail.ShotChartDetail(
-        team_id=1610612751, player_id=id, context_measure_simple="FGA")
-    shotChartDetailAllDF = shotChartDetailAll.shot_chart_detail.get_data_frame();
-    print(shotChartDetailAllDF)
-    # with open(f"shotChartDetail/{teamIDs[0]}/{id}.json", "a") as jFile:
-    #     json.dump(shotChartDetailAllDF.to_json(), jFile)
-    shotChartDetailAllDF.to_json(f'shotChartDetail/1610612751/{id}.json')
+print(size)
+idsArray = data[str(teamIDs[3])]
+print(idsArray)
+print(teamIDs[0])
+
+for teamID in teamIDs[3:30]:
+    for id in data[str(teamID)]:
+        shotChartDetailAll = shotchartdetail.ShotChartDetail(
+            season_nullable="2018-19", team_id=teamID, player_id=id, context_measure_simple="FGA")
+        shotChartDetailAllDF = shotChartDetailAll.shot_chart_detail.get_data_frame();
+        print(shotChartDetailAllDF)
+        # with open(f"shotChartDetail/{teamIDs[0]}/{id}.json", "a") as jFile:
+        #     json.dump(shotChartDetailAllDF.to_json(), jFile)
+        shotChartDetailAllDF.to_json(f'shotChartDetail18-19/{teamID}/{id}.json')
+    time.sleep(6)
 
 
 
