@@ -105,10 +105,11 @@ def draw_court(ax=None, color='black', lw=2, outer_lines=False):
 
 
 # create our jointplot
+cmap = plt.cm.gist_heat_r
 joint_shot_chart = sns.jointplot(x=df.LOC_X, y=df.LOC_Y,
-                                 kind='scatter', space=0, alpha=0.5)
+                                 kind='hex', space=0, color=cmap(.2), cmap=cmap)
 
-joint_shot_chart.fig.set_size_inches(12, 11)
+joint_shot_chart.fig.set_size_inches(10, 9)
 
 # A joint plot has 3 Axes, the first one called ax_joint
 # is the one we want to draw our court onto and adjust some other settings
@@ -126,12 +127,12 @@ ax.set_ylabel('')
 ax.tick_params(labelbottom='off', labelleft='off')
 
 # Add a title
-ax.set_title('James Harden FGA \n2014-15 Reg. Season',
-             y=1.2, fontsize=18)
+ax.set_title('DEJOUNTE MURRAY FGA \n2022-23 Reg Season',
+             y=1.2, fontsize=10)
 
 # Add Data Scource and Author
 ax.text(-250, 445, 'Data Source: stats.nba.com'
-        '\nAuthor: Savvas Tjortjoglou (savvastjortjoglou.com)',
+        '\nAuthor: Shuqi Yang',
         fontsize=12)
 
 plt.show()
