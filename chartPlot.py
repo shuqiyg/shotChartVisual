@@ -7,6 +7,7 @@ import seaborn as sns
 df = pd.read_json('shotChartDetail22-23/1610612737/1627749.json')
 right = df[df.SHOT_ZONE_AREA == "Right Side(R)"]
 left = df[df.SHOT_ZONE_AREA == "Left Side(L)"]
+# df = df[df["SHOT_MADE_FLAG"] == 1]
 # right_corner_3 = df[df.SHOT_ZONE_AREA == "Right Corner 3"]
 # left_corner_3 = df[df.SHOT_ZONE_AREA == "Left Corner 3"]
 # print(df)
@@ -47,9 +48,9 @@ def draw_court(ax=None, color='black', lw=2, outer_lines=False):
 
     # Three point line
     # Create the side 3pt lines, they are 14ft long before they begin to arc
-    corner_three_a = Rectangle((-220, -47.5), 0, 140, linewidth=lw,
+    corner_three_a = Rectangle((-220, -47.5), 0, 136, linewidth=lw,
                                color=color)
-    corner_three_b = Rectangle((220, -47.5), 0, 140, linewidth=lw, color=color)
+    corner_three_b = Rectangle((220, -47.5), 0, 136, linewidth=lw, color=color)
     # 3pt arc - center of arc will be the hoop, arc is 23'9" away from hoop
     # I just played around with the theta values until they lined up with the
     # threes
@@ -77,7 +78,7 @@ def draw_court(ax=None, color='black', lw=2, outer_lines=False):
     # Add the court elements onto the axes
     for element in court_elements:
         ax.add_patch(element)
-
+    # ax.set_facecolor("black")
     return ax
 
 # sns.set_style("white")
@@ -105,7 +106,7 @@ def draw_court(ax=None, color='black', lw=2, outer_lines=False):
 
 
 # create our jointplot
-cmap = plt.cm.gist_heat_r
+cmap = plt.cm.ocean_r
 joint_shot_chart = sns.jointplot(x=df.LOC_X, y=df.LOC_Y,
                                  kind='hex', space=0, color=cmap(.2), cmap=cmap)
 
