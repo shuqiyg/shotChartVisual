@@ -1,7 +1,12 @@
-from nba_api.stats.endpoints import commonplayerinfo, LeagueLeaders, scoreboardv2, LeagueStandingsV3,commonallplayers, commonteamroster, playerfantasyprofile, shotchartdetail, shotchartlineupdetail, shotchartleaguewide, leaguedashoppptshot, leaguedashplayerptshot, leaguedashplayershotlocations, leaguedashteamptshot, leaguedashteamshotlocations, playerdashptshots, playerdashptshotdefend, TeamDashPtShots
+from nba_api.stats.endpoints import commonplayerinfo, LeagueLeaders, scoreboardv2, LeagueStandingsV3,commonallplayers, commonteamroster, playerfantasyprofile, shotchartdetail, shotchartlineupdetail, shotchartleaguewide, leaguedashoppptshot, leaguedashplayerptshot, leaguedashplayershotlocations, leaguedashteamptshot, leaguedashteamshotlocations, playerdashptshots, playerdashptshotdefend, TeamDashPtShots, PlayerEstimatedMetrics
 
 import pandas, json, requests, os, time
 
+player_estimated_metrics = PlayerEstimatedMetrics(season="2022-23", season_type="Regular Season").player_estimated_metrics.get_data_frame()
+df = player_estimated_metrics.loc[(player_estimated_metrics['GP'] >= 50) & (
+    player_estimated_metrics['MIN'] >= 20)].sort_values(by=['E_DEF_RATING'], ascending=True)
+df.to_csv("off_def_rating.csv", index=False)
+print(df[['PLAYER_NAME','GP','MIN','E_DEF_RATING']])
 
 
 teamIDs = [1610612743, 1610612749, 1610612738, 1610612763, 1610612758, 1610612755, 1610612739, 1610612746, 1610612752, 1610612756, 1610612744, 1610612748, 1610612750, 1610612751, 1610612737,
@@ -39,30 +44,30 @@ teamIDs = [1610612743, 1610612749, 1610612738, 1610612763, 1610612758, 161061275
 #     json.dump(teamRosterIdsPairs, jFile)
 
 #fetch shotchartdetail of every single player for the regular seasons
-with open("teamRosterIdsPairs18-19.json", "r") as trpJson:
-    data = json.load(trpJson)
-print(type(data))
-print(data)
-size = 0
-for teamID in teamIDs:
-    for playerID in data[str(teamID)]:
-        size+=1
+# with open("teamRosterIdsPairs18-19.json", "r") as trpJson:
+#     data = json.load(trpJson)
+# print(type(data))
+# print(data)
+# size = 0
+# for teamID in teamIDs:
+#     for playerID in data[str(teamID)]:
+#         size+=1
 
-print(size)
-idsArray = data[str(teamIDs[3])]
-print(idsArray)
-print(teamIDs[0])
+# print(size)
+# idsArray = data[str(teamIDs[3])]
+# print(idsArray)
+# print(teamIDs[0])
 
-for teamID in teamIDs[3:30]:
-    for id in data[str(teamID)]:
-        shotChartDetailAll = shotchartdetail.ShotChartDetail(
-            season_nullable="2018-19", team_id=teamID, player_id=id, context_measure_simple="FGA")
-        shotChartDetailAllDF = shotChartDetailAll.shot_chart_detail.get_data_frame();
-        print(shotChartDetailAllDF)
-        # with open(f"shotChartDetail/{teamIDs[0]}/{id}.json", "a") as jFile:
-        #     json.dump(shotChartDetailAllDF.to_json(), jFile)
-        shotChartDetailAllDF.to_json(f'shotChartDetail18-19/{teamID}/{id}.json')
-    time.sleep(6)
+# for teamID in teamIDs[3:30]:
+#     for id in data[str(teamID)]:
+#         shotChartDetailAll = shotchartdetail.ShotChartDetail(
+#             season_nullable="2018-19", team_id=teamID, player_id=id, context_measure_simple="FGA")
+#         shotChartDetailAllDF = shotChartDetailAll.shot_chart_detail.get_data_frame();
+#         print(shotChartDetailAllDF)
+#         # with open(f"shotChartDetail/{teamIDs[0]}/{id}.json", "a") as jFile:
+#         #     json.dump(shotChartDetailAllDF.to_json(), jFile)
+#         shotChartDetailAllDF.to_json(f'shotChartDetail18-19/{teamID}/{id}.json')
+#     time.sleep(6)
 
 
 
