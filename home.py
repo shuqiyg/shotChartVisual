@@ -1,12 +1,17 @@
 from nba_api.stats.endpoints import commonplayerinfo, LeagueLeaders, scoreboardv2, LeagueStandingsV3,commonallplayers, commonteamroster, playerfantasyprofile, shotchartdetail, shotchartlineupdetail, shotchartleaguewide, leaguedashoppptshot, leaguedashplayerptshot, leaguedashplayershotlocations, leaguedashteamptshot, leaguedashteamshotlocations, playerdashptshots, playerdashptshotdefend, TeamDashPtShots, PlayerEstimatedMetrics
 
-import pandas, json, requests, os, time
+import pandas, json, requests, os, time, plotly.express as px
 
 player_estimated_metrics = PlayerEstimatedMetrics(season="2022-23", season_type="Regular Season").player_estimated_metrics.get_data_frame()
 df = player_estimated_metrics.loc[(player_estimated_metrics['GP'] >= 50) & (
-    player_estimated_metrics['MIN'] >= 20)].sort_values(by=['E_DEF_RATING'], ascending=True)
-df.to_csv("off_def_rating.csv", index=False)
+    player_estimated_metrics['MIN'] >= 20)]
+# df.to_csv("off_def_rating.csv", index=False)
+df = df.sort_values(by="E_DEF_RATING", ascending=False)
 print(df[['PLAYER_NAME','GP','MIN','E_DEF_RATING']])
+
+fig = px.scatter(df, x='E_OFF_RATING', y='E_DEF_RATING', hover_name='PLAYER_NAME')
+fig.update_layout(yaxis=dict(autorange="reversed"))
+fig.show()
 
 
 teamIDs = [1610612743, 1610612749, 1610612738, 1610612763, 1610612758, 1610612755, 1610612739, 1610612746, 1610612752, 1610612756, 1610612744, 1610612748, 1610612750, 1610612751, 1610612737,
