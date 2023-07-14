@@ -4,7 +4,7 @@ import pandas, json, requests, os, time, plotly.express as px
 
 player_estimated_metrics = PlayerEstimatedMetrics(season="2022-23", season_type="Regular Season").player_estimated_metrics.get_data_frame()
 df = player_estimated_metrics.loc[(player_estimated_metrics['GP'] >= 50) & (
-    player_estimated_metrics['MIN'] >= 20)]
+    player_estimated_metrics['MIN'] >= 25)]
 # df.to_csv("off_def_rating.csv", index=False)
 df = df.sort_values(by="E_DEF_RATING", ascending=False)
 print(df[['PLAYER_NAME','GP','MIN','E_DEF_RATING']])
@@ -13,13 +13,20 @@ fig = px.scatter(df,
                 x='E_OFF_RATING',
                 y='E_DEF_RATING', 
                 hover_name='PLAYER_NAME',
-                size=('E_NET_RATING'),
-                color='W',
+                text='PLAYER_NAME',
+                size=('W_PCT'),
+                color='E_USG_PCT_RANK',
                 labels={'E_OFF_RATING': 'OFFENSIVE RATING',
-                        'E_DEF_RATING': 'DEFENSIVE RATING'},
+                        'E_DEF_RATING': 'DEFENSIVE RATING',
+                        'E_USG_PCT_RANK': 'Usage Rank'},
                 log_x=True,
+                color_continuous_scale=px.colors.sequential.YlOrRd_r,
+                category_orders={'E_USG_PCT_RANK': sorted(df['E_USG_PCT_RANK'])},
+                # trendline='ols'
                 )
-fig.update_layout(yaxis=dict(autorange="reversed"))
+fig.update_traces(textposition='top center')
+fig.update_layout(yaxis=dict(autorange="reversed"),
+                  legend={'traceorder': 'reversed'})
 fig.show()
 
 
