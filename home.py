@@ -9,7 +9,16 @@ df = player_estimated_metrics.loc[(player_estimated_metrics['GP'] >= 50) & (
 df = df.sort_values(by="E_DEF_RATING", ascending=False)
 print(df[['PLAYER_NAME','GP','MIN','E_DEF_RATING']])
 
-fig = px.scatter(df, x='E_OFF_RATING', y='E_DEF_RATING', hover_name='PLAYER_NAME')
+fig = px.scatter(df,
+                x='E_OFF_RATING',
+                y='E_DEF_RATING', 
+                hover_name='PLAYER_NAME',
+                size=('E_NET_RATING'),
+                color='W',
+                labels={'E_OFF_RATING': 'OFFENSIVE RATING',
+                        'E_DEF_RATING': 'DEFENSIVE RATING'},
+                log_x=True,
+                )
 fig.update_layout(yaxis=dict(autorange="reversed"))
 fig.show()
 
